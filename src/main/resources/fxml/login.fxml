@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+
+<StackPane xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="fr.ticngo.controller.LoginController"
+           styleClass="login-bg">
+
+    <VBox styleClass="login-card" maxWidth="380" maxHeight="460" alignment="CENTER">
+        <padding><Insets top="50" right="40" bottom="50" left="40"/></padding>
+
+        <!-- Logo -->
+        <Label text="🎭" styleClass="login-logo"/>
+        <Label text="Tic'n Go" styleClass="login-title"/>
+        <Label text="Back-office billetterie" styleClass="login-subtitle"/>
+
+        <Region minHeight="24"/>
+
+        <!-- Email -->
+        <Label text="Adresse email" styleClass="form-label"/>
+        <TextField fx:id="emailField" promptText="admin@ticngo.fr"
+                   styleClass="form-input" text="admin@ticngo.fr"/>
+
+        <Region minHeight="12"/>
+
+        <!-- Password -->
+        <Label text="Mot de passe" styleClass="form-label"/>
+        <PasswordField fx:id="passwordField" promptText="••••••••"
+                       styleClass="form-input" onKeyPressed="#onPasswordKeyPressed"/>
+
+        <Region minHeight="6"/>
+
+        <!-- Error -->
+        <Label fx:id="errorLabel" styleClass="error-label" visible="false" wrapText="true"/>
+
+        <Region minHeight="20"/>
+
+        <!-- Login button -->
+        <Button fx:id="loginBtn" text="Se connecter" styleClass="btn-primary"
+                maxWidth="Infinity" onAction="#onLogin"/>
+
+        <Region minHeight="20"/>
+        <Label text="admin@ticngo.fr / Admin1234!" styleClass="login-hint"/>
+    </VBox>
+</StackPane>

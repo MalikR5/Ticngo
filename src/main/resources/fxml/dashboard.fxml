@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="fr.ticngo.controller.DashboardController"
+      spacing="24">
+
+    <!-- Stat cards row -->
+    <HBox spacing="16">
+        <!-- Total Billets -->
+        <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+            <Label text="Total Billets" styleClass="stat-card-label"/>
+            <Label fx:id="statBillets" text="0" styleClass="stat-card-value" style="-fx-text-fill:#667eea;"/>
+            <Label text="🎫 tous statuts" styleClass="stat-card-sub"/>
+        </VBox>
+        <!-- Spectacles -->
+        <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+            <Label text="Spectacles" styleClass="stat-card-label"/>
+            <Label fx:id="statSpectacles" text="0" styleClass="stat-card-value" style="-fx-text-fill:#48bb78;"/>
+            <Label text="🎭 au programme" styleClass="stat-card-sub"/>
+        </VBox>
+        <!-- Clients -->
+        <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+            <Label text="Clients" styleClass="stat-card-label"/>
+            <Label fx:id="statClients" text="0" styleClass="stat-card-value" style="-fx-text-fill:#ed8936;"/>
+            <Label text="👥 inscrits" styleClass="stat-card-sub"/>
+        </VBox>
+        <!-- Revenus -->
+        <VBox styleClass="stat-card" HBox.hgrow="ALWAYS">
+            <Label text="Revenus" styleClass="stat-card-label"/>
+            <Label fx:id="statRevenu" text="0 €" styleClass="stat-card-value" style="-fx-text-fill:#e53e3e;"/>
+            <Label text="💰 encaissés" styleClass="stat-card-sub"/>
+        </VBox>
+    </HBox>
+
+    <!-- Second row: mini stats -->
+    <HBox spacing="16">
+        <VBox styleClass="stat-card-mini" HBox.hgrow="ALWAYS">
+            <Label text="✅ Billets valides" styleClass="stat-card-label"/>
+            <Label fx:id="statValides" text="0" styleClass="stat-mini-value" style="-fx-text-fill:#48bb78;"/>
+        </VBox>
+        <VBox styleClass="stat-card-mini" HBox.hgrow="ALWAYS">
+            <Label text="❌ Billets annulés" styleClass="stat-card-label"/>
+            <Label fx:id="statAnnules" text="0" styleClass="stat-mini-value" style="-fx-text-fill:#e53e3e;"/>
+        </VBox>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Region HBox.hgrow="ALWAYS"/>
+    </HBox>
+
+    <!-- Recent billets table -->
+    <VBox styleClass="card" VBox.vgrow="ALWAYS">
+        <Label text="Billets récents" styleClass="card-title"/>
+        <Region minHeight="12"/>
+        <TableView fx:id="recentTable" VBox.vgrow="ALWAYS" styleClass="data-table">
+            <columns>
+                <TableColumn fx:id="colNumero"    text="N° Billet"  prefWidth="160"/>
+                <TableColumn fx:id="colClient"    text="Client"     prefWidth="150"/>
+                <TableColumn fx:id="colSpectacle" text="Spectacle"  prefWidth="200"/>
+                <TableColumn fx:id="colDate"      text="Date"       prefWidth="130"/>
+                <TableColumn fx:id="colPrix"      text="Prix"       prefWidth="80"/>
+                <TableColumn fx:id="colStatut"    text="Statut"     prefWidth="100"/>
+            </columns>
+            <placeholder><Label text="Aucun billet"/></placeholder>
+        </TableView>
+    </VBox>
+
+</VBox>

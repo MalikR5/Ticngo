@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="fr.ticngo.controller.SpectacleFormController"
+      spacing="14" prefWidth="460" styleClass="dialog-card">
+    <padding><Insets top="28" right="28" bottom="28" left="28"/></padding>
+
+    <Label text="Spectacle" styleClass="form-title"/>
+    <Separator/>
+
+    <VBox spacing="6">
+        <Label text="Titre *" styleClass="form-label"/>
+        <TextField fx:id="titreField" promptText="ex: Hamlet" styleClass="form-input"/>
+    </VBox>
+    <VBox spacing="6">
+        <Label text="Catégorie" styleClass="form-label"/>
+        <ComboBox fx:id="categorieCombo" maxWidth="Infinity" styleClass="form-combo"/>
+    </VBox>
+    <VBox spacing="6">
+        <Label text="Prix de base (€)" styleClass="form-label"/>
+        <TextField fx:id="prixField" promptText="ex: 45.00" styleClass="form-input"/>
+    </VBox>
+    <VBox spacing="6">
+        <Label text="Lieu" styleClass="form-label"/>
+        <ComboBox fx:id="lieuCombo" maxWidth="Infinity" styleClass="form-combo"/>
+    </VBox>
+    <VBox spacing="6">
+        <Label text="Description" styleClass="form-label"/>
+        <TextArea fx:id="descriptionArea" prefRowCount="3" styleClass="form-input" wrapText="true"/>
+    </VBox>
+
+    <Label fx:id="errorLabel" styleClass="error-label" visible="false" wrapText="true"/>
+
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <Button text="Annuler" styleClass="btn-secondary" onAction="#onCancel"/>
+        <Button text="✓ Enregistrer" styleClass="btn-primary" onAction="#onSave"/>
+    </HBox>
+</VBox>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="fr.ticngo.controller.BilletListController"
+      spacing="16">
+
+    <!-- Toolbar -->
+    <HBox spacing="12" alignment="CENTER_LEFT">
+        <TextField fx:id="searchField" promptText="🔍  Rechercher (N°, client...)"
+                   styleClass="search-field" prefWidth="280"/>
+        <ComboBox fx:id="statutFilter" promptText="Statut" styleClass="form-combo" prefWidth="150"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Label fx:id="countLabel" styleClass="count-label"/>
+        <Button text="📄 Export PDF" styleClass="btn-secondary" onAction="#onExportPdfListe"/>
+        <Button text="+ Nouveau billet" styleClass="btn-primary" onAction="#onNouveauBillet"/>
+    </HBox>
+
+    <!-- Table -->
+    <VBox styleClass="card" VBox.vgrow="ALWAYS">
+        <TableView fx:id="billetTable" VBox.vgrow="ALWAYS" styleClass="data-table">
+            <columns>
+                <TableColumn fx:id="colNumero"    text="N° Billet"  prefWidth="160"/>
+                <TableColumn fx:id="colClient"    text="Client"     prefWidth="150"/>
+                <TableColumn fx:id="colSpectacle" text="Spectacle"  prefWidth="170"/>
+                <TableColumn fx:id="colDate"      text="Date séance" prefWidth="130"/>
+                <TableColumn fx:id="colPrix"      text="Prix"       prefWidth="80"/>
+                <TableColumn fx:id="colStatut"    text="Statut"     prefWidth="100"/>
+                <TableColumn fx:id="colActions"   text="Actions"    prefWidth="200"/>
+            </columns>
+            <placeholder><Label text="Aucun billet trouvé"/></placeholder>
+        </TableView>
+    </VBox>
+
+</VBox>

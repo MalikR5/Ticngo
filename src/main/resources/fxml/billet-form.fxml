@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="fr.ticngo.controller.BilletFormController"
+      spacing="0" maxWidth="700">
+
+    <VBox styleClass="card" spacing="16">
+        <padding><Insets top="8" right="8" bottom="8" left="8"/></padding>
+
+        <Label text="Créer un nouveau billet" styleClass="form-title"/>
+        <Separator/>
+
+        <!-- Client -->
+        <VBox spacing="6">
+            <Label text="Client *" styleClass="form-label"/>
+            <ComboBox fx:id="clientCombo" styleClass="form-combo" maxWidth="Infinity"/>
+        </VBox>
+
+        <!-- Séance -->
+        <VBox spacing="6">
+            <Label text="Séance *" styleClass="form-label"/>
+            <ComboBox fx:id="seanceCombo" styleClass="form-combo" maxWidth="Infinity"/>
+        </VBox>
+
+        <!-- Prix -->
+        <VBox spacing="6">
+            <Label text="Prix (€) *" styleClass="form-label"/>
+            <TextField fx:id="prixField" promptText="ex: 45.00" styleClass="form-input"/>
+        </VBox>
+
+        <!-- Error -->
+        <Label fx:id="errorLabel" styleClass="error-label" visible="false" wrapText="true"/>
+
+        <!-- Buttons -->
+        <HBox spacing="12" alignment="CENTER_RIGHT">
+            <padding><Insets top="8"/></padding>
+            <Button text="Annuler" styleClass="btn-secondary" onAction="#onCancel"/>
+            <Button text="✓ Créer le billet" styleClass="btn-primary" onAction="#onSave"/>
+        </HBox>
+    </VBox>
+</VBox>

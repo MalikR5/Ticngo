@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="fr.ticngo.controller.MainController"
+            prefWidth="1200" prefHeight="750">
+
+    <!-- ===== SIDEBAR ===== -->
+    <left>
+        <VBox styleClass="sidebar" prefWidth="240" minWidth="200">
+
+            <!-- Logo -->
+            <VBox styleClass="sidebar-logo" alignment="CENTER">
+                <padding><Insets top="28" right="20" bottom="28" left="20"/></padding>
+                <Label text="🎭  Tic'n Go" styleClass="sidebar-logo-text"/>
+                <Label text="Back-office" styleClass="sidebar-logo-sub"/>
+            </VBox>
+
+            <Separator styleClass="sidebar-sep"/>
+
+            <Region minHeight="10"/>
+
+            <!-- Navigation -->
+            <Label text="NAVIGATION" styleClass="sidebar-section-label">
+                <padding><Insets top="0" right="0" bottom="4" left="20"/></padding>
+            </Label>
+
+            <Button fx:id="btnDashboard" text="📊  Tableau de bord"
+                    styleClass="sidebar-btn" maxWidth="Infinity"
+                    onAction="#navigateToDashboard"/>
+            <Button fx:id="btnBillets" text="🎫  Billets"
+                    styleClass="sidebar-btn" maxWidth="Infinity"
+                    onAction="#navigateToBillets"/>
+            <Button fx:id="btnSpectacles" text="🎭  Spectacles"
+                    styleClass="sidebar-btn" maxWidth="Infinity"
+                    onAction="#navigateToSpectacles"/>
+            <Button fx:id="btnClients" text="👥  Clients"
+                    styleClass="sidebar-btn" maxWidth="Infinity"
+                    onAction="#navigateToClients"/>
+
+            <!-- Spacer -->
+            <Region VBox.vgrow="ALWAYS"/>
+
+            <Separator styleClass="sidebar-sep"/>
+
+            <!-- Admin info -->
+            <HBox styleClass="sidebar-admin" alignment="CENTER_LEFT">
+                <padding><Insets top="16" right="16" bottom="12" left="16"/></padding>
+                <Label text="👤" style="-fx-font-size:20;"/>
+                <VBox HBox.hgrow="ALWAYS">
+                    <padding><Insets left="10"/></padding>
+                    <Label fx:id="adminNameLabel" text="Administrateur" styleClass="sidebar-admin-name"/>
+                    <Label text="Super Admin" styleClass="sidebar-admin-role"/>
+                </VBox>
+            </HBox>
+
+            <Button text="🚪  Déconnexion" styleClass="sidebar-btn-logout" maxWidth="Infinity"
+                    onAction="#onLogout">
+                <VBox.margin><Insets bottom="12" left="12" right="12"/></VBox.margin>
+            </Button>
+        </VBox>
+    </left>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <center>
+        <VBox styleClass="main-wrapper">
+            <!-- Top header bar -->
+            <HBox styleClass="main-header" alignment="CENTER_LEFT">
+                <padding><Insets top="18" right="28" bottom="18" left="28"/></padding>
+                <Label fx:id="pageTitleLabel" text="Tableau de bord" styleClass="main-header-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label text="Tic'n Go v1.0" styleClass="main-header-version"/>
+            </HBox>
+
+            <!-- Dynamic content -->
+            <StackPane fx:id="contentPane" VBox.vgrow="ALWAYS" styleClass="content-area">
+                <padding><Insets top="24" right="28" bottom="24" left="28"/></padding>
+            </StackPane>
+        </VBox>
+    </center>
+
+</BorderPane>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="fr.ticngo.controller.SpectacleListController"
+      spacing="16">
+
+    <HBox spacing="12" alignment="CENTER_LEFT">
+        <TextField fx:id="searchField" promptText="🔍  Rechercher un spectacle..."
+                   styleClass="search-field" prefWidth="280"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Label fx:id="countLabel" styleClass="count-label"/>
+        <Button text="+ Nouveau spectacle" styleClass="btn-primary" onAction="#onNouveauSpectacle"/>
+    </HBox>
+
+    <VBox styleClass="card" VBox.vgrow="ALWAYS">
+        <TableView fx:id="spectacleTable" VBox.vgrow="ALWAYS" styleClass="data-table">
+            <columns>
+                <TableColumn fx:id="colTitre"     text="Titre"       prefWidth="220"/>
+                <TableColumn fx:id="colCategorie"  text="Catégorie"   prefWidth="130"/>
+                <TableColumn fx:id="colLieu"       text="Lieu"        prefWidth="180"/>
+                <TableColumn fx:id="colPrix"       text="Prix de base" prefWidth="110"/>
+                <TableColumn fx:id="colActions"    text="Actions"     prefWidth="160"/>
+            </columns>
+            <placeholder><Label text="Aucun spectacle"/></placeholder>
+        </TableView>
+    </VBox>
+</VBox>

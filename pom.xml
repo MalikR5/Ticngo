@@ -39,13 +39,6 @@
             <version>8.3.0</version>
         </dependency>
 
-        <!-- BCrypt (sans Spring Security) -->
-        <dependency>
-            <groupId>org.mindrot</groupId>
-            <artifactId>jbcrypt</artifactId>
-            <version>0.4</version>
-        </dependency>
-
         <!-- PDF -->
         <dependency>
             <groupId>com.itextpdf</groupId>

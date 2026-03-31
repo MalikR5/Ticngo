@@ -3,15 +3,15 @@ package fr.ticngo.config;
 import fr.ticngo.model.*;
 import fr.ticngo.repository.*;
 import fr.ticngo.service.AuthService;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-@Component
-public class DataInitializer implements CommandLineRunner {
+/**
+ * Initialisation des données de démonstration.
+ * Appelé depuis TicnGoApplication si la base est vide.
+ */
+public class DataInitializer {
 
     private final AdministrateurRepository adminRepo;
     private final LieuRepository lieuRepo;
@@ -21,75 +21,160 @@ public class DataInitializer implements CommandLineRunner {
     private final BilletRepository billetRepo;
     private final AuthService authService;
 
-    @Value("${app.init-data:true}")
-    private boolean initData;
-
     public DataInitializer(AdministrateurRepository adminRepo, LieuRepository lieuRepo,
                            SpectacleRepository spectacleRepo, SeanceRepository seanceRepo,
                            ClientRepository clientRepo, BilletRepository billetRepo,
                            AuthService authService) {
-        this.adminRepo = adminRepo; this.lieuRepo = lieuRepo;
-        this.spectacleRepo = spectacleRepo; this.seanceRepo = seanceRepo;
-        this.clientRepo = clientRepo; this.billetRepo = billetRepo;
+        this.adminRepo = adminRepo;
+        this.lieuRepo = lieuRepo;
+        this.spectacleRepo = spectacleRepo;
+        this.seanceRepo = seanceRepo;
+        this.clientRepo = clientRepo;
+        this.billetRepo = billetRepo;
         this.authService = authService;
     }
 
-    @Override
-    public void run(String... args) {
+    public void run() {
         // Admin par défaut
         if (adminRepo.count() == 0) {
-            adminRepo.save(Administrateur.builder()
-                    .email("admin@ticngo.fr")
-                    .motDePasse(authService.encodePassword("Admin1234!"))
-                    .nom("Admin").prenom("Super").build());
+            Administrateur admin = new Administrateur();
+            admin.setEmail("admin@ticngo.fr");
+            admin.setMotDePasse(authService.encodePassword("Admin1234!"));
+            admin.setNom("Admin");
+            admin.setPrenom("Super");
+            adminRepo.save(admin);
         }
 
-        if (!initData || spectacleRepo.count() > 0) return;
+        if (spectacleRepo.count() > 0) return;
 
         // Lieux
-        Lieu olympia = lieuRepo.save(Lieu.builder().nom("L'Olympia").ville("Paris").adresse("28 Bd des Capucines").capacite(2000).build());
-        Lieu zenith = lieuRepo.save(Lieu.builder().nom("Zénith de Paris").ville("Paris").adresse("211 Av. Jean Jaurès").capacite(6300).build());
+        Lieu olympia = new Lieu();
+        olympia.setNom("L'Olympia");
+        olympia.setVille("Paris");
+        olympia.setAdresse("28 Bd des Capucines");
+        olympia.setCapacite(2000);
+        olympia = lieuRepo.save(olympia);
+
+        Lieu zenith = new Lieu();
+        zenith.setNom("Zénith de Paris");
+        zenith.setVille("Paris");
+        zenith.setAdresse("211 Av. Jean Jaurès");
+        zenith.setCapacite(6300);
+        zenith = lieuRepo.save(zenith);
 
         // Spectacles
-        Spectacle hamlet = spectacleRepo.save(Spectacle.builder()
-                .titre("Hamlet").categorie("Théâtre").description("La grande tragédie de Shakespeare")
-                .prixBase(new BigDecimal("45.00")).lieu(olympia).dateCreation(LocalDateTime.now()).build());
-        Spectacle concert = spectacleRepo.save(Spectacle.builder()
-                .titre("Concert Jazz Night").categorie("Concert").description("Une nuit de jazz")
-                .prixBase(new BigDecimal("35.00")).lieu(zenith).dateCreation(LocalDateTime.now()).build());
-        Spectacle comedie = spectacleRepo.save(Spectacle.builder()
-                .titre("La Comédie du Siècle").categorie("Comédie").description("Un spectacle hilarant")
-                .prixBase(new BigDecimal("29.00")).lieu(olympia).dateCreation(LocalDateTime.now()).build());
+        Spectacle hamlet = new Spectacle();
+        hamlet.setTitre("Hamlet");
+        hamlet.setCategorie("Théâtre");
+        hamlet.setDescription("La grande tragédie de Shakespeare");
+        hamlet.setPrixBase(new BigDecimal("45.00"));
+        hamlet.setLieu(olympia);
+        hamlet.setDateCreation(LocalDateTime.now());
+        hamlet = spectacleRepo.save(hamlet);
+
+        Spectacle concert = new Spectacle();
+        concert.setTitre("Concert Jazz Night");
+        concert.setCategorie("Concert");
+        concert.setDescription("Une nuit de jazz");
+        concert.setPrixBase(new BigDecimal("35.00"));
+        concert.setLieu(zenith);
+        concert.setDateCreation(LocalDateTime.now());
+        concert = spectacleRepo.save(concert);
+
+        Spectacle comedie = new Spectacle();
+        comedie.setTitre("La Comédie du Siècle");
+        comedie.setCategorie("Comédie");
+        comedie.setDescription("Un spectacle hilarant");
+        comedie.setPrixBase(new BigDecimal("29.00"));
+        comedie.setLieu(olympia);
+        comedie.setDateCreation(LocalDateTime.now());
+        comedie = spectacleRepo.save(comedie);
 
         // Séances
-        Seance s1 = seanceRepo.save(Seance.builder().spectacle(hamlet)
-                .dateHeure(LocalDateTime.now().plusDays(10)).placesTotales(200).placesDisponibles(150).build());
-        Seance s2 = seanceRepo.save(Seance.builder().spectacle(concert)
-                .dateHeure(LocalDateTime.now().plusDays(15)).placesTotales(500).placesDisponibles(320).build());
-        Seance s3 = seanceRepo.save(Seance.builder().spectacle(comedie)
-                .dateHeure(LocalDateTime.now().plusDays(5)).placesTotales(300).placesDisponibles(200).build());
-        Seance s4 = seanceRepo.save(Seance.builder().spectacle(hamlet)
-                .dateHeure(LocalDateTime.now().plusDays(20)).placesTotales(200).placesDisponibles(180).build());
+        Seance s1 = new Seance();
+        s1.setSpectacle(hamlet);
+        s1.setDateHeure(LocalDateTime.now().plusDays(10));
+        s1.setPlacesTotales(200);
+        s1.setPlacesDisponibles(150);
+        s1 = seanceRepo.save(s1);
+
+        Seance s2 = new Seance();
+        s2.setSpectacle(concert);
+        s2.setDateHeure(LocalDateTime.now().plusDays(15));
+        s2.setPlacesTotales(500);
+        s2.setPlacesDisponibles(320);
+        s2 = seanceRepo.save(s2);
+
+        Seance s3 = new Seance();
+        s3.setSpectacle(comedie);
+        s3.setDateHeure(LocalDateTime.now().plusDays(5));
+        s3.setPlacesTotales(300);
+        s3.setPlacesDisponibles(200);
+        s3 = seanceRepo.save(s3);
+
+        Seance s4 = new Seance();
+        s4.setSpectacle(hamlet);
+        s4.setDateHeure(LocalDateTime.now().plusDays(20));
+        s4.setPlacesTotales(200);
+        s4.setPlacesDisponibles(180);
+        s4 = seanceRepo.save(s4);
 
         // Clients
-        Client c1 = clientRepo.save(Client.builder().nom("Martin").prenom("Sophie")
-                .email("sophie.martin@email.fr").telephone("06 12 34 56 78")
-                .dateInscription(LocalDateTime.now().minusMonths(2)).build());
-        Client c2 = clientRepo.save(Client.builder().nom("Dupont").prenom("Lucas")
-                .email("lucas.dupont@email.fr").telephone("07 98 76 54 32")
-                .dateInscription(LocalDateTime.now().minusMonths(1)).build());
-        Client c3 = clientRepo.save(Client.builder().nom("Bernard").prenom("Emma")
-                .email("emma.bernard@email.fr").telephone("06 55 44 33 22")
-                .dateInscription(LocalDateTime.now().minusDays(15)).build());
+        Client c1 = new Client();
+        c1.setNom("Martin");
+        c1.setPrenom("Sophie");
+        c1.setEmail("sophie.martin@email.fr");
+        c1.setTelephone("06 12 34 56 78");
+        c1.setDateInscription(LocalDateTime.now().minusMonths(2));
+        c1 = clientRepo.save(c1);
+
+        Client c2 = new Client();
+        c2.setNom("Dupont");
+        c2.setPrenom("Lucas");
+        c2.setEmail("lucas.dupont@email.fr");
+        c2.setTelephone("07 98 76 54 32");
+        c2.setDateInscription(LocalDateTime.now().minusMonths(1));
+        c2 = clientRepo.save(c2);
+
+        Client c3 = new Client();
+        c3.setNom("Bernard");
+        c3.setPrenom("Emma");
+        c3.setEmail("emma.bernard@email.fr");
+        c3.setTelephone("06 55 44 33 22");
+        c3.setDateInscription(LocalDateTime.now().minusDays(15));
+        c3 = clientRepo.save(c3);
 
         // Billets
-        billetRepo.save(Billet.builder().numeroBillet("TCK-20240301-A1B2C3").client(c1).seance(s1)
-                .prix(new BigDecimal("45.00")).statut(Billet.StatutBillet.VALIDE).dateAchat(LocalDateTime.now().minusDays(5)).build());
-        billetRepo.save(Billet.builder().numeroBillet("TCK-20240302-D4E5F6").client(c2).seance(s2)
-                .prix(new BigDecimal("35.00")).statut(Billet.StatutBillet.VALIDE).dateAchat(LocalDateTime.now().minusDays(3)).build());
-        billetRepo.save(Billet.builder().numeroBillet("TCK-20240303-G7H8I9").client(c3).seance(s3)
-                .prix(new BigDecimal("29.00")).statut(Billet.StatutBillet.UTILISE).dateAchat(LocalDateTime.now().minusDays(10)).build());
-        billetRepo.save(Billet.builder().numeroBillet("TCK-20240304-J0K1L2").client(c1).seance(s4)
-                .prix(new BigDecimal("45.00")).statut(Billet.StatutBillet.ANNULE).dateAchat(LocalDateTime.now().minusDays(1)).build());
+        Billet b1 = new Billet();
+        b1.setNumeroBillet("TCK-20240301-A1B2C3");
+        b1.setClient(c1); b1.setSeance(s1);
+        b1.setPrix(new BigDecimal("45.00"));
+        b1.setStatut(Billet.StatutBillet.VALIDE);
+        b1.setDateAchat(LocalDateTime.now().minusDays(5));
+        billetRepo.save(b1);
+
+        Billet b2 = new Billet();
+        b2.setNumeroBillet("TCK-20240302-D4E5F6");
+        b2.setClient(c2); b2.setSeance(s2);
+        b2.setPrix(new BigDecimal("35.00"));
+        b2.setStatut(Billet.StatutBillet.VALIDE);
+        b2.setDateAchat(LocalDateTime.now().minusDays(3));
+        billetRepo.save(b2);
+
+        Billet b3 = new Billet();
+        b3.setNumeroBillet("TCK-20240303-G7H8I9");
+        b3.setClient(c3); b3.setSeance(s3);
+        b3.setPrix(new BigDecimal("29.00"));
+        b3.setStatut(Billet.StatutBillet.UTILISE);
+        b3.setDateAchat(LocalDateTime.now().minusDays(10));
+        billetRepo.save(b3);
+
+        Billet b4 = new Billet();
+        b4.setNumeroBillet("TCK-20240304-J0K1L2");
+        b4.setClient(c1); b4.setSeance(s4);
+        b4.setPrix(new BigDecimal("45.00"));
+        b4.setStatut(Billet.StatutBillet.ANNULE);
+        b4.setDateAchat(LocalDateTime.now().minusDays(1));
+        billetRepo.save(b4);
     }
 }

@@ -6,8 +6,6 @@ import fr.ticngo.model.Client;
 import fr.ticngo.model.Seance;
 import fr.ticngo.repository.BilletRepository;
 import fr.ticngo.repository.SeanceRepository;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -16,8 +14,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-@Service
-@Transactional
 public class BilletService {
 
     private final BilletRepository billetRepo;
@@ -32,7 +28,7 @@ public class BilletService {
         return billetRepo.findAll();
     }
 
-    public Optional<Billet> findById(Long id) {
+    public Optional<Billet> findById(int id) {
         return billetRepo.findById(id);
     }
 
@@ -50,14 +46,13 @@ public class BilletService {
         String numero = "TCK-" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"))
                         + "-" + UUID.randomUUID().toString().substring(0, 6).toUpperCase();
 
-        Billet billet = Billet.builder()
-                .numeroBillet(numero)
-                .client(client)
-                .seance(seance)
-                .prix(prix)
-                .statut(StatutBillet.VALIDE)
-                .dateAchat(LocalDateTime.now())
-                .build();
+        Billet billet = new Billet();
+        billet.setNumeroBillet(numero);
+        billet.setClient(client);
+        billet.setSeance(seance);
+        billet.setPrix(prix);
+        billet.setStatut(StatutBillet.VALIDE);
+        billet.setDateAchat(LocalDateTime.now());
 
         seance.setPlacesDisponibles(seance.getPlacesDisponibles() - 1);
         seanceRepo.save(seance);
@@ -69,7 +64,7 @@ public class BilletService {
         return billetRepo.save(billet);
     }
 
-    public void annuler(Long id) {
+    public void annuler(int id) {
         Billet b = billetRepo.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Billet introuvable"));
         if (b.getStatut() != StatutBillet.VALIDE) {
@@ -82,7 +77,7 @@ public class BilletService {
         billetRepo.save(b);
     }
 
-    public void valider(Long id) {
+    public void valider(int id) {
         Billet b = billetRepo.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Billet introuvable"));
         if (b.getStatut() != StatutBillet.VALIDE) {
@@ -92,7 +87,7 @@ public class BilletService {
         billetRepo.save(b);
     }
 
-    public void delete(Long id) {
+    public void delete(int id) {
         billetRepo.deleteById(id);
     }
 

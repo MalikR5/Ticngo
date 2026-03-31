@@ -1,16 +1,12 @@
 package fr.ticngo.controller;
 
+import fr.ticngo.config.AppContext;
 import fr.ticngo.model.Client;
 import fr.ticngo.service.ClientService;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 
-@Component
-@Scope("prototype")
 public class ClientFormController {
 
     @FXML private TextField nomField;
@@ -19,9 +15,13 @@ public class ClientFormController {
     @FXML private TextField telField;
     @FXML private Label errorLabel;
 
-    @Autowired private ClientService clientService;
-
+    private ClientService clientService;
     private Client client;
+
+    @FXML
+    public void initialize() {
+        clientService = AppContext.getInstance().getClientService();
+    }
 
     public void setClient(Client c) {
         this.client = c;
@@ -35,9 +35,9 @@ public class ClientFormController {
 
     @FXML public void onSave() {
         errorLabel.setVisible(false);
-        String nom = nomField.getText().trim();
+        String nom    = nomField.getText().trim();
         String prenom = prenomField.getText().trim();
-        String email = emailField.getText().trim();
+        String email  = emailField.getText().trim();
 
         if (nom.isEmpty() || prenom.isEmpty() || email.isEmpty()) {
             showError("Nom, prénom et email sont obligatoires."); return;

@@ -1,5 +1,6 @@
 package fr.ticngo.controller;
 
+import fr.ticngo.config.AppContext;
 import fr.ticngo.model.Lieu;
 import fr.ticngo.model.Spectacle;
 import fr.ticngo.repository.LieuRepository;
@@ -9,16 +10,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-@Component
-@Scope("prototype")
 public class SpectacleFormController implements Initializable {
 
     @FXML private TextField titreField;
@@ -28,13 +24,14 @@ public class SpectacleFormController implements Initializable {
     @FXML private ComboBox<Lieu> lieuCombo;
     @FXML private Label errorLabel;
 
-    @Autowired private SpectacleService spectacleService;
-    @Autowired private LieuRepository lieuRepo;
-
+    private SpectacleService spectacleService;
     private Spectacle spectacle;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        spectacleService = AppContext.getInstance().getSpectacleService();
+        LieuRepository lieuRepo = AppContext.getInstance().getLieuRepository();
+
         categorieCombo.setItems(FXCollections.observableArrayList(
             "Théâtre", "Concert", "Comédie", "Danse", "Opéra", "Cirque", "Autre"));
         lieuCombo.setItems(FXCollections.observableArrayList(lieuRepo.findAll()));

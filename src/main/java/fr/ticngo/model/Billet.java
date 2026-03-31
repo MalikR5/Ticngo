@@ -1,39 +1,51 @@
 package fr.ticngo.model;
 
-import jakarta.persistence.*;
-import lombok.*;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-@Entity
-@Table(name = "billets")
-@Data @NoArgsConstructor @AllArgsConstructor @Builder
 public class Billet {
 
-    public enum StatutBillet {
-        VALIDE, ANNULE, REMBOURSE, UTILISE
-    }
+    public enum StatutBillet { VALIDE, ANNULE, REMBOURSE, UTILISE }
 
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(name = "numero_billet", unique = true)
+    private Integer id;
     private String numeroBillet;
-
-    @Enumerated(EnumType.STRING)
-    private StatutBillet statut;
-
+    private Client client;
+    private Seance seance;
     private BigDecimal prix;
-
-    @Column(name = "date_achat")
+    private StatutBillet statut;
     private LocalDateTime dateAchat;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "client_id")
-    private Client client;
+    public Billet() {}
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "seance_id")
-    private Seance seance;
+    public Billet(Integer id, String numeroBillet, Client client, Seance seance,
+                  BigDecimal prix, StatutBillet statut, LocalDateTime dateAchat) {
+        this.id = id;
+        this.numeroBillet = numeroBillet;
+        this.client = client;
+        this.seance = seance;
+        this.prix = prix;
+        this.statut = statut;
+        this.dateAchat = dateAchat;
+    }
+
+    public Integer getId() { return id; }
+    public void setId(Integer id) { this.id = id; }
+
+    public String getNumeroBillet() { return numeroBillet; }
+    public void setNumeroBillet(String numeroBillet) { this.numeroBillet = numeroBillet; }
+
+    public Client getClient() { return client; }
+    public void setClient(Client client) { this.client = client; }
+
+    public Seance getSeance() { return seance; }
+    public void setSeance(Seance seance) { this.seance = seance; }
+
+    public BigDecimal getPrix() { return prix; }
+    public void setPrix(BigDecimal prix) { this.prix = prix; }
+
+    public StatutBillet getStatut() { return statut; }
+    public void setStatut(StatutBillet statut) { this.statut = statut; }
+
+    public LocalDateTime getDateAchat() { return dateAchat; }
+    public void setDateAchat(LocalDateTime dateAchat) { this.dateAchat = dateAchat; }
 }

@@ -1,37 +1,43 @@
 package fr.ticngo;
 
+import fr.ticngo.config.AppContext;
+import fr.ticngo.config.DataInitializer;
 import javafx.application.Application;
-import javafx.application.Platform;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.WebApplicationType;
-import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.context.ConfigurableApplicationContext;
 
-@org.springframework.boot.autoconfigure.SpringBootApplication
 public class TicnGoApplication extends Application {
 
-    private ConfigurableApplicationContext springContext;
+    @Override
+    public void start(Stage stage) throws Exception {
+        // Initialise le contexte DI et les données de démo
+        AppContext ctx = AppContext.getInstance();
+        new DataInitializer(
+            ctx.getAdministrateurRepository(),
+            ctx.getLieuRepository(),
+            ctx.getSpectacleRepository(),
+            ctx.getSeanceRepository(),
+            ctx.getClientRepository(),
+            ctx.getBilletRepository(),
+            ctx.getAuthService()
+        ).run();
+
+        FXMLLoader loader = new FXMLLoader(
+                TicnGoApplication.class.getResource("/fxml/login.fxml")
+        );
+
+        Scene scene = new Scene(loader.load(), 420, 520);
+        scene.getStylesheets().add(
+            getClass().getResource("/css/style.css").toExternalForm()
+        );
+        stage.setTitle("Tic'n Go — Connexion");
+        stage.setScene(scene);
+        stage.setResizable(false);
+        stage.show();
+    }
 
     public static void main(String[] args) {
         launch(args);
-    }
-
-    @Override
-    public void init() {
-        springContext = new SpringApplicationBuilder(TicnGoApplication.class)
-                .web(WebApplicationType.NONE)
-                .run();
-    }
-
-    @Override
-    public void start(Stage primaryStage) throws Exception {
-        springContext.publishEvent(new StageReadyEvent(primaryStage));
-    }
-
-    @Override
-    public void stop() throws Exception {
-        springContext.close();
-        Platform.exit();
     }
 }

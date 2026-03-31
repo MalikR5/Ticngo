@@ -2,15 +2,11 @@ package fr.ticngo.service;
 
 import fr.ticngo.model.Client;
 import fr.ticngo.repository.ClientRepository;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-@Service
-@Transactional
 public class ClientService {
     private final ClientRepository clientRepo;
 
@@ -19,12 +15,12 @@ public class ClientService {
     }
 
     public List<Client> findAll() { return clientRepo.findAll(); }
-    public Optional<Client> findById(Long id) { return clientRepo.findById(id); }
+
+    public Optional<Client> findById(int id) { return clientRepo.findById(id); }
 
     public List<Client> search(String query) {
         if (query == null || query.isBlank()) return findAll();
-        return clientRepo.findByNomContainingIgnoreCaseOrPrenomContainingIgnoreCaseOrEmailContainingIgnoreCase(
-            query, query, query);
+        return clientRepo.search(query);
     }
 
     public Client save(Client client) {
@@ -34,6 +30,6 @@ public class ClientService {
         return clientRepo.save(client);
     }
 
-    public void delete(Long id) { clientRepo.deleteById(id); }
+    public void delete(int id) { clientRepo.deleteById(id); }
     public long count() { return clientRepo.count(); }
 }

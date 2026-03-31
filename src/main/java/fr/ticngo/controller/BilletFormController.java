@@ -1,5 +1,6 @@
 package fr.ticngo.controller;
 
+import fr.ticngo.config.AppContext;
 import fr.ticngo.model.Client;
 import fr.ticngo.model.Seance;
 import fr.ticngo.service.BilletService;
@@ -10,16 +11,11 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-@Component
-@Scope("prototype")
 public class BilletFormController implements Initializable {
 
     @FXML private ComboBox<Client> clientCombo;
@@ -27,17 +23,19 @@ public class BilletFormController implements Initializable {
     @FXML private TextField prixField;
     @FXML private Label errorLabel;
 
-    @Autowired private BilletService billetService;
-    @Autowired private ClientService clientService;
-    @Autowired private SeanceService seanceService;
-    @Autowired private NavigationService navigationService;
+    private BilletService     billetService;
+    private NavigationService navigationService;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        billetService     = AppContext.getInstance().getBilletService();
+        navigationService = AppContext.getInstance().getNavigationService();
+        ClientService clientService   = AppContext.getInstance().getClientService();
+        SeanceService seanceService   = AppContext.getInstance().getSeanceService();
+
         clientCombo.setItems(FXCollections.observableArrayList(clientService.findAll()));
         seanceCombo.setItems(FXCollections.observableArrayList(seanceService.findAll()));
 
-        // auto-fill prix when seance selected
         seanceCombo.valueProperty().addListener((obs, o, seance) -> {
             if (seance != null && seance.getSpectacle().getPrixBase() != null) {
                 prixField.setText(seance.getSpectacle().getPrixBase().toString());

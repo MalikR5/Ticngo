@@ -1,5 +1,6 @@
 package fr.ticngo.controller;
 
+import fr.ticngo.config.AppContext;
 import fr.ticngo.model.Billet;
 import fr.ticngo.service.BilletService;
 import fr.ticngo.service.PdfService;
@@ -11,9 +12,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.FileChooser;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -23,30 +21,32 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.ResourceBundle;
 
-@Component
-@Scope("prototype")
 public class BilletListController implements Initializable {
 
     @FXML private TextField searchField;
     @FXML private ComboBox<String> statutFilter;
     @FXML private TableView<Billet> billetTable;
-    @FXML private TableColumn<Billet, String> colNumero;
-    @FXML private TableColumn<Billet, String> colClient;
-    @FXML private TableColumn<Billet, String> colSpectacle;
-    @FXML private TableColumn<Billet, String> colDate;
-    @FXML private TableColumn<Billet, BigDecimal> colPrix;
+    @FXML private TableColumn<Billet, String>              colNumero;
+    @FXML private TableColumn<Billet, String>              colClient;
+    @FXML private TableColumn<Billet, String>              colSpectacle;
+    @FXML private TableColumn<Billet, String>              colDate;
+    @FXML private TableColumn<Billet, BigDecimal>          colPrix;
     @FXML private TableColumn<Billet, Billet.StatutBillet> colStatut;
-    @FXML private TableColumn<Billet, Void> colActions;
+    @FXML private TableColumn<Billet, Void>                colActions;
     @FXML private Label countLabel;
 
-    @Autowired private BilletService billetService;
-    @Autowired private PdfService pdfService;
-    @Autowired private NavigationService navigationService;
+    private BilletService    billetService;
+    private PdfService       pdfService;
+    private NavigationService navigationService;
 
     private static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        billetService     = AppContext.getInstance().getBilletService();
+        pdfService        = AppContext.getInstance().getPdfService();
+        navigationService = AppContext.getInstance().getNavigationService();
+
         statutFilter.setItems(FXCollections.observableArrayList("Tous", "VALIDE", "ANNULE", "UTILISE", "REMBOURSE"));
         statutFilter.setValue("Tous");
 
@@ -75,8 +75,10 @@ public class BilletListController implements Initializable {
                 if (empty || item == null) { setText(null); setStyle(""); return; }
                 setText(item.name());
                 String c = switch (item) {
-                    case VALIDE -> "#48bb78"; case ANNULE -> "#e53e3e";
-                    case REMBOURSE -> "#ed8936"; case UTILISE -> "#667eea";
+                    case VALIDE    -> "#48bb78";
+                    case ANNULE    -> "#e53e3e";
+                    case REMBOURSE -> "#ed8936";
+                    case UTILISE   -> "#667eea";
                 };
                 setStyle("-fx-text-fill:" + c + ";-fx-font-weight:bold;");
             }
@@ -141,14 +143,14 @@ public class BilletListController implements Initializable {
     }
 
     private void annuler(Billet b) {
-        Alert confirm = new Alert(Alert.AlertType.CONFIRMATION,
-            "Annuler le billet " + b.getNumeroBillet() + " ?", ButtonType.YES, ButtonType.NO);
-        confirm.showAndWait().ifPresent(r -> {
-            if (r == ButtonType.YES) {
-                try { billetService.annuler(b.getId()); loadData(); }
-                catch (Exception e) { showAlert(Alert.AlertType.ERROR, "Erreur", e.getMessage()); }
-            }
-        });
+        new Alert(Alert.AlertType.CONFIRMATION,
+            "Annuler le billet " + b.getNumeroBillet() + " ?", ButtonType.YES, ButtonType.NO)
+            .showAndWait().ifPresent(r -> {
+                if (r == ButtonType.YES) {
+                    try { billetService.annuler(b.getId()); loadData(); }
+                    catch (Exception e) { showAlert(Alert.AlertType.ERROR, "Erreur", e.getMessage()); }
+                }
+            });
     }
 
     private void valider(Billet b) {

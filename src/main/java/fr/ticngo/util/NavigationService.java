@@ -6,9 +6,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import org.springframework.stereotype.Service;
 
-@Service
+
+
 public class NavigationService {
 
     private MainController mainController;

@@ -1,30 +1,40 @@
 package fr.ticngo.model;
 
-import jakarta.persistence.*;
-import lombok.*;
-
-import java.util.List;
-
-@Entity
-@Table(name = "lieux")
-@Data @NoArgsConstructor @AllArgsConstructor @Builder
 public class Lieu {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
-    @Column(nullable = false)
+    private Integer id;
     private String nom;
-
     private String adresse;
     private String ville;
-    private Integer capacite;
+    private int capacite;
 
-    @OneToMany(mappedBy = "lieu", cascade = CascadeType.ALL)
-    @ToString.Exclude @EqualsAndHashCode.Exclude
-    private List<Spectacle> spectacles;
+    public Lieu() {}
+
+    public Lieu(Integer id, String nom, String adresse, String ville, int capacite) {
+        this.id = id;
+        this.nom = nom;
+        this.adresse = adresse;
+        this.ville = ville;
+        this.capacite = capacite;
+    }
 
     @Override
     public String toString() {
-        return nom + (ville != null ? " — " + ville : "");
+        return nom + (ville != null ? " – " + ville : "");
     }
+
+    public Integer getId() { return id; }
+    public void setId(Integer id) { this.id = id; }
+
+    public String getNom() { return nom; }
+    public void setNom(String nom) { this.nom = nom; }
+
+    public String getAdresse() { return adresse; }
+    public void setAdresse(String adresse) { this.adresse = adresse; }
+
+    public String getVille() { return ville; }
+    public void setVille(String ville) { this.ville = ville; }
+
+    public int getCapacite() { return capacite; }
+    public void setCapacite(int capacite) { this.capacite = capacite; }
 }

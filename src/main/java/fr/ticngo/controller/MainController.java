@@ -1,5 +1,6 @@
 package fr.ticngo.controller;
 
+import fr.ticngo.config.AppContext;
 import fr.ticngo.util.FxmlLoader;
 import fr.ticngo.util.NavigationService;
 import fr.ticngo.util.SessionManager;
@@ -11,15 +12,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
-@Component
-@Scope("prototype")
 public class MainController implements Initializable {
 
     @FXML private StackPane contentPane;
@@ -30,13 +26,16 @@ public class MainController implements Initializable {
     @FXML private Button btnSpectacles;
     @FXML private Button btnClients;
 
-    @Autowired private FxmlLoader fxmlLoader;
-    @Autowired private NavigationService navigationService;
+    private FxmlLoader fxmlLoader;
+    private NavigationService navigationService;
 
     private Button activeBtn;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        fxmlLoader       = AppContext.getInstance().getFxmlLoader();
+        navigationService = AppContext.getInstance().getNavigationService();
+
         navigationService.setMainController(this);
         if (SessionManager.getCurrentAdmin() != null) {
             adminNameLabel.setText(SessionManager.getCurrentAdmin().getNomComplet());

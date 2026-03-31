@@ -1,5 +1,6 @@
 package fr.ticngo.controller;
 
+import fr.ticngo.config.AppContext;
 import fr.ticngo.model.Client;
 import fr.ticngo.service.ClientService;
 import fr.ticngo.util.FxmlLoader;
@@ -13,16 +14,11 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 
 import java.net.URL;
 import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
-@Component
-@Scope("prototype")
 public class ClientListController implements Initializable {
 
     @FXML private TextField searchField;
@@ -35,13 +31,16 @@ public class ClientListController implements Initializable {
     @FXML private TableColumn<Client, Void>   colActions;
     @FXML private Label countLabel;
 
-    @Autowired private ClientService clientService;
-    @Autowired private FxmlLoader fxmlLoader;
+    private ClientService clientService;
+    private FxmlLoader fxmlLoader;
 
     private static final DateTimeFormatter DF = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        clientService = AppContext.getInstance().getClientService();
+        fxmlLoader    = AppContext.getInstance().getFxmlLoader();
+
         colNom.setCellValueFactory(new PropertyValueFactory<>("nom"));
         colPrenom.setCellValueFactory(new PropertyValueFactory<>("prenom"));
         colEmail.setCellValueFactory(new PropertyValueFactory<>("email"));
@@ -53,9 +52,11 @@ public class ClientListController implements Initializable {
         colActions.setCellFactory(col -> new TableCell<>() {
             private final Button btnEdit = new Button("Modifier");
             private final Button btnDel  = new Button("Supprimer");
-            { btnEdit.getStyleClass().add("btn-secondary"); btnDel.getStyleClass().add("btn-danger");
-              btnEdit.setOnAction(e -> openForm(getTableView().getItems().get(getIndex())));
-              btnDel.setOnAction(e -> deleteClient(getTableView().getItems().get(getIndex())));
+            {
+                btnEdit.getStyleClass().add("btn-secondary");
+                btnDel.getStyleClass().add("btn-danger");
+                btnEdit.setOnAction(e -> openForm(getTableView().getItems().get(getIndex())));
+                btnDel.setOnAction(e -> deleteClient(getTableView().getItems().get(getIndex())));
             }
             @Override protected void updateItem(Void v, boolean empty) {
                 super.updateItem(v, empty);

@@ -1,5 +1,6 @@
 package fr.ticngo.controller;
 
+import fr.ticngo.config.AppContext;
 import fr.ticngo.model.Billet;
 import fr.ticngo.service.BilletService;
 import fr.ticngo.service.ClientService;
@@ -9,9 +10,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.net.URL;
@@ -19,8 +17,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.ResourceBundle;
 
-@Component
-@Scope("prototype")
 public class DashboardController implements Initializable {
 
     @FXML private Label statBillets;
@@ -31,21 +27,21 @@ public class DashboardController implements Initializable {
     @FXML private Label statAnnules;
 
     @FXML private TableView<Billet> recentTable;
-    @FXML private TableColumn<Billet, String>  colNumero;
-    @FXML private TableColumn<Billet, String>  colClient;
-    @FXML private TableColumn<Billet, String>  colSpectacle;
-    @FXML private TableColumn<Billet, String>  colDate;
-    @FXML private TableColumn<Billet, BigDecimal> colPrix;
+    @FXML private TableColumn<Billet, String>           colNumero;
+    @FXML private TableColumn<Billet, String>           colClient;
+    @FXML private TableColumn<Billet, String>           colSpectacle;
+    @FXML private TableColumn<Billet, String>           colDate;
+    @FXML private TableColumn<Billet, BigDecimal>       colPrix;
     @FXML private TableColumn<Billet, Billet.StatutBillet> colStatut;
-
-    @Autowired private BilletService billetService;
-    @Autowired private SpectacleService spectacleService;
-    @Autowired private ClientService clientService;
 
     private static final DateTimeFormatter DTF = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        BilletService    billetService    = AppContext.getInstance().getBilletService();
+        SpectacleService spectacleService = AppContext.getInstance().getSpectacleService();
+        ClientService    clientService    = AppContext.getInstance().getClientService();
+
         statBillets.setText(String.valueOf(billetService.countAll()));
         statSpectacles.setText(String.valueOf(spectacleService.count()));
         statClients.setText(String.valueOf(clientService.count()));
@@ -53,7 +49,6 @@ public class DashboardController implements Initializable {
         statValides.setText(String.valueOf(billetService.countByStatut(Billet.StatutBillet.VALIDE)));
         statAnnules.setText(String.valueOf(billetService.countByStatut(Billet.StatutBillet.ANNULE)));
 
-        // Table colonnes
         colNumero.setCellValueFactory(new PropertyValueFactory<>("numeroBillet"));
         colPrix.setCellValueFactory(new PropertyValueFactory<>("prix"));
         colStatut.setCellValueFactory(new PropertyValueFactory<>("statut"));
@@ -70,17 +65,16 @@ public class DashboardController implements Initializable {
             new javafx.beans.property.SimpleStringProperty(
                 data.getValue().getSeance().getDateHeure().format(DTF)));
 
-        // Coloriser statut
         colStatut.setCellFactory(col -> new TableCell<>() {
             @Override protected void updateItem(Billet.StatutBillet item, boolean empty) {
                 super.updateItem(item, empty);
                 if (empty || item == null) { setText(null); setStyle(""); return; }
                 setText(item.name());
                 String color = switch (item) {
-                    case VALIDE   -> "#48bb78";
-                    case ANNULE   -> "#e53e3e";
-                    case REMBOURSE-> "#ed8936";
-                    case UTILISE  -> "#667eea";
+                    case VALIDE    -> "#48bb78";
+                    case ANNULE    -> "#e53e3e";
+                    case REMBOURSE -> "#ed8936";
+                    case UTILISE   -> "#667eea";
                 };
                 setStyle("-fx-text-fill: " + color + "; -fx-font-weight: bold;");
             }

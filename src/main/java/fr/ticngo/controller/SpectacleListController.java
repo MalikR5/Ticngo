@@ -1,8 +1,9 @@
 package fr.ticngo.controller;
 
+import fr.ticngo.config.AppContext;
 import fr.ticngo.model.Spectacle;
 import fr.ticngo.service.SpectacleService;
-import fr.ticngo.util.NavigationService;
+import fr.ticngo.util.FxmlLoader;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -14,17 +15,11 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-import fr.ticngo.util.FxmlLoader;
 
 import java.math.BigDecimal;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-@Component
-@Scope("prototype")
 public class SpectacleListController implements Initializable {
 
     @FXML private TextField searchField;
@@ -36,12 +31,14 @@ public class SpectacleListController implements Initializable {
     @FXML private TableColumn<Spectacle, Void>       colActions;
     @FXML private Label countLabel;
 
-    @Autowired private SpectacleService spectacleService;
-    @Autowired private NavigationService navigationService;
-    @Autowired private FxmlLoader fxmlLoader;
+    private SpectacleService spectacleService;
+    private FxmlLoader       fxmlLoader;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        spectacleService = AppContext.getInstance().getSpectacleService();
+        fxmlLoader       = AppContext.getInstance().getFxmlLoader();
+
         colTitre.setCellValueFactory(new PropertyValueFactory<>("titre"));
         colCategorie.setCellValueFactory(new PropertyValueFactory<>("categorie"));
         colPrix.setCellValueFactory(new PropertyValueFactory<>("prixBase"));
@@ -51,15 +48,16 @@ public class SpectacleListController implements Initializable {
         colActions.setCellFactory(col -> new TableCell<>() {
             private final Button btnEdit = new Button("Modifier");
             private final Button btnDel  = new Button("Supprimer");
-            { btnEdit.getStyleClass().add("btn-secondary"); btnDel.getStyleClass().add("btn-danger");
-              btnEdit.setOnAction(e -> openForm(getTableView().getItems().get(getIndex())));
-              btnDel.setOnAction(e -> deleteSpectacle(getTableView().getItems().get(getIndex())));
+            {
+                btnEdit.getStyleClass().add("btn-secondary");
+                btnDel.getStyleClass().add("btn-danger");
+                btnEdit.setOnAction(e -> openForm(getTableView().getItems().get(getIndex())));
+                btnDel.setOnAction(e -> deleteSpectacle(getTableView().getItems().get(getIndex())));
             }
             @Override protected void updateItem(Void v, boolean empty) {
                 super.updateItem(v, empty);
                 if (empty) { setGraphic(null); return; }
-                javafx.scene.layout.HBox box = new javafx.scene.layout.HBox(4, btnEdit, btnDel);
-                setGraphic(box);
+                setGraphic(new javafx.scene.layout.HBox(4, btnEdit, btnDel));
             }
         });
 

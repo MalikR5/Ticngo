@@ -1,25 +1,39 @@
 package fr.ticngo.model;
 
-import jakarta.persistence.*;
-import lombok.*;
-
-@Entity
-@Table(name = "administrateurs")
-@Data @NoArgsConstructor @AllArgsConstructor @Builder
 public class Administrateur {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
-    @Column(nullable = false, unique = true)
+    private Integer id;
     private String email;
-
-    @Column(nullable = false)
     private String motDePasse;
-
     private String nom;
     private String prenom;
 
-    public String getNomComplet() {
-        return prenom + " " + nom;
+    public Administrateur() {}
+
+    public Administrateur(Integer id, String email, String motDePasse, String nom, String prenom) {
+        this.id = id;
+        this.email = email;
+        this.motDePasse = motDePasse;
+        this.nom = nom;
+        this.prenom = prenom;
     }
+
+    public String getNomComplet() {
+        return (prenom != null ? prenom : "") + " " + (nom != null ? nom : "");
+    }
+
+    public Integer getId() { return id; }
+    public void setId(Integer id) { this.id = id; }
+
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
+
+    public String getMotDePasse() { return motDePasse; }
+    public void setMotDePasse(String motDePasse) { this.motDePasse = motDePasse; }
+
+    public String getNom() { return nom; }
+    public void setNom(String nom) { this.nom = nom; }
+
+    public String getPrenom() { return prenom; }
+    public void setPrenom(String prenom) { this.prenom = prenom; }
 }

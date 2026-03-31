@@ -1,10 +1,10 @@
 package fr.ticngo.controller;
 
+import fr.ticngo.config.AppContext;
 import fr.ticngo.model.Administrateur;
 import fr.ticngo.service.AuthService;
 import fr.ticngo.util.FxmlLoader;
 import fr.ticngo.util.SessionManager;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -13,14 +13,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 
-@Component
-@Scope("prototype")
 public class LoginController {
 
     @FXML private TextField emailField;
@@ -28,8 +23,14 @@ public class LoginController {
     @FXML private Label errorLabel;
     @FXML private Button loginBtn;
 
-    @Autowired private AuthService authService;
-    @Autowired private FxmlLoader fxmlLoader;
+    private AuthService authService;
+    private FxmlLoader fxmlLoader;
+
+    @FXML
+    public void initialize() {
+        authService = AppContext.getInstance().getAuthService();
+        fxmlLoader  = AppContext.getInstance().getFxmlLoader();
+    }
 
     @FXML
     public void onLogin() {

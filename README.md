@@ -13,9 +13,9 @@ Back-office billetterie en JavaFX + Spring Boot + MySQL
 Modifier `src/main/resources/application.properties` :
 
 ```properties
-spring.datasource.url=jdbc:mysql://localhost:3306/ticngo?createDatabaseIfNotExist=true&...
+spring.datasource.url=jdbc:mysql://localhost:8889/ticngo?createDatabaseIfNotExist=true&...
 spring.datasource.username=root
-spring.datasource.password=TON_MOT_DE_PASSE
+spring.datasource.password=root
 ```
 
 ## Lancement
@@ -66,8 +66,6 @@ src/main/resources/
 |-----------------------|-----------|
 | Java                  | 21        |
 | JavaFX                | 21.0.2    |
-| Spring Boot           | 3.2.0     |
-| Spring Data JPA       | 3.2.0     |
 | MySQL Connector       | 8.x       |
 | iText 8               | 8.0.3     |
 | Lombok                | latest    |

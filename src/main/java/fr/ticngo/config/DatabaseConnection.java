@@ -6,9 +6,9 @@ import java.sql.SQLException;
 
 public class DatabaseConnection {
 
-    private static final String URL = "jdbc:mysql://localhost:3306/ticngo";
+    private static final String URL = "jdbc:mysql://localhost:8889/ticngo";
     private static final String USER = "root";
-    private static final String PASSWORD = "";
+    private static final String PASSWORD = "root";
 
     private DatabaseConnection() {
     }
